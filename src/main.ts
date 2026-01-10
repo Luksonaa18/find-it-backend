@@ -14,7 +14,7 @@ async function bootstrap() {
     }),
   );
    app.enableCors({
-    origin: 'http://localhost:3001',
+    origin: 'findit-production-7c39.up.railway.app',
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
