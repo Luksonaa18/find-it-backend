@@ -9,15 +9,16 @@ import {
   Delete,
   UploadedFile,
   UseInterceptors,
-  Req,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import type { Express } from 'express';
+
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
+import { UpdatePostDto } from './dto/update-post.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-guard';
 import { CurrentUser } from 'src/auth/current-user.decorator';
 import { User } from 'src/auth/schema/auth.schema';
-import { UpdatePostDto } from './dto/update-post.dto';
-import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('posts')
 export class PostsController {
@@ -39,12 +40,6 @@ export class PostsController {
     return this.postsService.getPosts();
   }
 
-  @Get('region/:region')
-  @UseGuards(JwtAuthGuard)
-  async getPostsByRegion(@Param('region') region: string) {
-    return this.postsService.getPostsByRegion(region);
-  }
-
   @Put(':id')
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor('image'))
@@ -60,6 +55,6 @@ export class PostsController {
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
   async deletePost(@Param('id') id: string) {
-    return await this.postsService.deletePost(id);
+    return this.postsService.deletePost(id);
   }
 }
