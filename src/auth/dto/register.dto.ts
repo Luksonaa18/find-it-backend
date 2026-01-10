@@ -4,6 +4,7 @@ import {
   IsString,
   MinLength,
   IsIn,
+  MaxLength,
 } from 'class-validator';
 
 export class RegisterDto {
@@ -24,5 +25,6 @@ export class RegisterDto {
   region: string;
   @IsString()
   @IsNotEmpty()
+  @MaxLength(9)
   phone: string;
 }

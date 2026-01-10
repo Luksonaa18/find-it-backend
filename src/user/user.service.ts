@@ -32,7 +32,6 @@ export class UserService {
     return this.userModel.find().select('-password').lean().exec();
   }
 
-  // Block a user
   async blockUser(userId: string) {
     return this.userModel
       .findByIdAndUpdate(

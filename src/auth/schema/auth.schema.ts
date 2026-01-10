@@ -32,6 +32,7 @@ export class User extends Document {
 
   @Prop({ default: false })
   isBlocked: boolean;
+  
   @Prop({ type: String, default: null })
   verificationCode: string | null;
 

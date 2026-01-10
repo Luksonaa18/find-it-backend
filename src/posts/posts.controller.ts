@@ -21,10 +21,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('posts')
 export class PostsController {
-  constructor(
-    private readonly postsService: PostsService,
-    
-  ) {}
+  constructor(private readonly postsService: PostsService) {}
 
   @Post()
   @UseGuards(JwtAuthGuard)
@@ -50,12 +47,14 @@ export class PostsController {
 
   @Put(':id')
   @UseGuards(JwtAuthGuard)
+  @UseInterceptors(FileInterceptor('image'))
   async updatePost(
     @Param('id') id: string,
     @Body() dto: UpdatePostDto,
+    @UploadedFile() file: Express.Multer.File,
     @CurrentUser() user: User,
   ) {
-    return this.postsService.editPost(id, dto, user);
+    return this.postsService.editPost(id, dto, user, file);
   }
 
   @Delete(':id')
@@ -63,6 +62,4 @@ export class PostsController {
   async deletePost(@Param('id') id: string) {
     return await this.postsService.deletePost(id);
   }
-
-
 }

@@ -28,7 +28,9 @@ export class AuthService {
       throw new BadRequestException('User with this email already exists');
 
     const hashed = await bcrypt.hash(password, 10);
-    const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+    const verificationCode = Math.floor(
+      100000 + Math.random() * 900000,
+    ).toString();
 
     const user = await this.UserModel.create({
       name,
@@ -68,16 +70,21 @@ export class AuthService {
     if (!isMatch) throw new UnauthorizedException('Invalid credentials');
 
     if (!user.isVerified)
-      throw new UnauthorizedException('Please verify your email before logging in');
+      throw new UnauthorizedException(
+        'Please verify your email before logging in',
+      );
 
-    const token = this.jwtService.sign({
-      id: user.id,
-      email: user.email,
-      name: user.name,
-      role: user.role,
-      region: user.region,
-      phone: user.phone,
-    });
+    const token = this.jwtService.sign(
+      {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
+        region: user.region,
+        phone: user.phone,
+      },
+      { expiresIn: '1d' },
+    );
 
     return {
       token,
